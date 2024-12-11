@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}
+Buscar Fundas
+{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/search.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+
+    <h2 class="text-primary mb-5">Búsqueda de Fundas</h2>
+    <div class="container mt-2">
+        {% if case_list %}
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">
+                        <p>Imagen</p>
+                    </th>
+                    <th scope="col">
+                        <p>Nombre</p>
+                    </th>
+                    <th scope="col">
+                        <p>Modelo</p>
+                    </th>
+                    <th scope="col">
+                        <p>Color</p>
+                    </th>
+                    <th scope="col">
+                        <p>Precio</p>
+                    </th>
+                    <th scope="col">
+                        <p>Acciones</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for case in case_list %}
+                <tr>
+                    <td class="align-middle">
+                        <a href="{{ case.get_absolute_url }}">
+                            <img class="img-fluid rounded shadow-sm" 
+                                 src="{% static case.path_to_cover_image.url %}" 
+                                 alt="{{ case.name }}" 
+                                 style="width: 100px; height: auto;" />
+                        </a>
+                    </td>
+                    <td class="align-middle">
+                        <a href="{{ case.get_absolute_url }}" class="text-decoration-none">
+                            <h5>{{ case.name }}</h5>
+                        </a>
+                    </td>
+                    <td class="align-middle">{{ case.model }}</td>
+                    <td class="align-middle">{{ case.color }}</td>
+                    <td class="align-middle">
+                        <h5 class="text-success">{{ case.price }} <i class="fa-solid fa-euro-sign"></i></h5>
+                    </td>
+                    <td class="align-middle">
+                        <a href="{% url 'cart_add' slug=case.slug %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-cart-plus"></i> Añadir al carrito
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div>
+            <ul class="pagination justify-content-center mt-5">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                {% if i == page_obj.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="#">{{ i }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        {% else %}
+        <!-- Mensaje de "No se encontraron resultados" -->
+        <div class="text-center">
+            <img src="{% static 'img/empty-search.gif' %}" class="img-fluid mb-4" alt="No results" style="width: 200px;" />
+            <h5 class="text-danger">No se encontraron fundas con tu búsqueda</h5>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock content %}

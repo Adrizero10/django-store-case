@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/populate.py",
+            "args": [
+                
+            ],
+            "django": true
+        }
+    ]
+}

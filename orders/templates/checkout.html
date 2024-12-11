@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/checkout.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+  {% if badRequest %}
+  <div class="alert alert-danger mt-lg-4" role="alert">
+    <i class="fas fa-check-circle"></i> Something is wrong with your order...
+  </div>
+  {% endif %}
+
+  <h2 class="text-primary mb-3">Shipping Address</h2>
+
+  <div class="container">
+    <form class="row g-3" method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-3 col-12">
+        <label for="exampleInputEmail1" class="form-label formLabel-style">
+          {{ field.label_tag }}</label>
+        <br />
+        {{ field }}
+        <div id="emailHelp" class="form-text mt-1">{% if field.help_text %}{{ field.help_text }}{% endif %}</div>
+        {% for error in field.errors %}
+        <p class="formError-style ml-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </form>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="mb-3 col-12 col-md-6">
+        {% if badRequest %}
+          <input type="submit" href="#" disabled class="btn btn-secondary w-100" value="Continuar">
+        {% else %}
+          <!-- PayPal Form -->
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="d-inline-block w-100">
+            {% csrf_token %}
+            {{ paypal.render }}
+          </form>
+        {% endif %}
+      </div>
+      <div class="mb-3 col-12 col-md-6 mt-3 mt-md-0">
+        <button href="{% url 'cart_list' %}" class="btn btn-outline-secondary w-100" type="submit">
+          <i class="fas fa-backward"></i> Volver atrás
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Expand at sm</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample03">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown03">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-md-0">
+        <input class="form-control" type="text" placeholder="Search">
+      </form>
+    </div>
+  </nav>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/home.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container mt-4">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Iphone Cases</h1>
+      <p class="lead text-muted">Las mejoras fundas de Iphone de silicona al mejor precio <strong>envio en 3-5 dias</strong></p>
+    </div>
+  </section>
+
+  {% if cases %}
+    <div class="mt-2">
+      <div class="album py-5">
+        <div class="container">
+          <div class="row">
+        {% for case in cases %}
+        
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow" style="border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+              <a href= "{{ case.get_absolute_url }}"><img class="card-img-top"  src="{% static case.path_to_cover_image.url %}" style="height: 15rem; width:auto; margin-left: 8rem; margin-right: auto;" alt="{{ case.name }}"></a>
+              <div class="card-body">
+                <a class="card-text text-decoration-none text-primary fw-bold" href="{{ case.get_absolute_url }}">
+                  {{ case.name }}
+                </a>
+                  <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                  </div>
+                  <small class="text-muted">{{case.model}} - {{case.color}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="card m-auto" style="width: 18rem;">
+      <img src="{% static 'img/perro-ewok.gif' %}" class="card-img-top" alt="perro-ewok">
+      <div class="card-body">
+        <h5 class="card-title">Ou... It seems that there are no cases available</h5>
+        <a href="https://youtu.be/000al7ru3ms" class="btn btn-primary" target="_blank">Go somewhere</a>
+      </div>
+    </div>
+    
+    <div class="alert alert-danger mt-4" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> No cases X_x
+    </div>
+  {% endif %}
+
+</section>
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Order placed{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/orderDone.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+  {% if orderid %}
+  <h2 class="text-primary mb-3 text-center">Pedido creado correctamente</h2>
+  <div class="container m-2">
+    <h3 class="text-center">Tu pedido se ha creado correctamente! En breve recibirás un correo con la confirmación del pedido.</h3>
+  </div>
+
+  <!-- Tarjeta con imagen y botón -->
+  <div class="card mt-4 m-auto w-100" style="max-width: 500px;">
+    <img src="{% static 'img/baby-yoda-happy.gif' %}" class="card-img-top" alt="baby-yoda-happy">
+    <div class="card-body">
+      <h5 class="card-title text-center">Yeeep!!!!!</h5>
+      <a href="https://youtu.be/000al7ru3ms" class="btn btn-primary w-100">Go somewhere</a>
+    </div>
+  </div>
+
+  <!-- Alerta con ID de pedido -->
+  <div class="alert alert-success mt-4 text-center" role="alert">
+    <i class="fas fa-check-circle"></i> El id de tu pedido es {{orderid}}
+  </div>
+  {% else %}
+  <div class="alert alert-danger mt-4 text-center" role="alert">
+    <i class="fas fa-check-circle"></i> Algo ha salido mal...
+  </div>
+  <div class="card mt-4 m-auto w-100" style="max-width: 500px;">
+    <img src="{% static 'img/dinosaur.gif' %}" class="card-img-top" alt="dinosaur">
+    <div class="card-body">
+      <h5 class="card-title text-center">Ouuuu...</h5>
+      <a href="{% url 'home' %}" class="btn btn-primary w-100">Salir</a>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

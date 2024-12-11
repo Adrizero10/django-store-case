@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+error404
+{% endblock %}
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/404.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+
+    <div class="card errorCardImg">
+        <img src="{% static 'img/error404.gif' %}" class="card-img-top" alt="error404">
+        <div class="card-body">
+          <h5 class="card-title">¯\_(ツ)_/¯... something is bad</h5>
+          <a href="https://youtu.be/000al7ru3ms" class="btn btn-primary">Go somewhere</a>
+  
+        </div>
+      </div>
+
+</section>
+
+{% endblock content %}

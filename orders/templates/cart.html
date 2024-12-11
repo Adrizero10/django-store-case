@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% block title %}
+Cart
+{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/cart.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+{% load custom_filters  %}
+
+<section class="h-100 gradient-custom">
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center my-4">
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Cesta - {{ cart_items|length }} productos</h5>
+            </div>
+            <div class="card-body">
+              <!-- Single item -->
+              {% for caseitem in cart_items %}
+              <div class="row">
+                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                  <!-- Image -->
+                  <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                    <img src="{% static caseitem.case.path_to_cover_image.url %}"
+                      class="w-100" alt="Blue Jeans Jacket" />
+                    <a href="#!">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                    </a>
+                  </div>
+                  <!-- Image -->
+                </div>
+  
+                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                    <!-- Card container -->
+                    <div class="card shadow-sm border-0">
+                      <div class="card-body">
+                        <!-- Nombre del producto -->
+                        <a href="{% url 'detail' slug=caseitem.case.slug %}" class="text-decoration-none text-primary">
+                            <h5 class="card-title fw-bold mb-3">{{ caseitem.case.name }}</h5>
+                        </a>
+                                          
+                        <!-- Detalles del producto -->
+                        <ul class="list-unstyled">
+                          <li class="mb-2">
+                            <strong>Modelo:</strong> {{ caseitem.case.model }}
+                          </li>
+                          <li class="mb-2">
+                            <strong>Color:</strong> {{ caseitem.case.color }}
+                          </li>
+                          <li class="mb-2">
+                            <strong>Precio:</strong> {{ caseitem.price }} <i class="fa fa-eur" aria-hidden="true"></i>
+                          </li>
+                        </ul>
+                  
+                        <!-- Botón para eliminar -->
+                        {% if caseitem.case.slug %}
+                        <a href="{% url 'cart_remove' slug=caseitem.case.slug %}" class="btn btn-danger btn-sm gap-2" title="Eliminar del carrito">
+                          <i class="fas fa-trash"></i> Eliminar
+                        </a>
+                        {% else %}
+                        <p class="text-danger mt-3">Error: Slug no disponible</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <!-- Card container -->
+                    <div>
+                      <div class="card-body">
+                        <!-- Contenedor de cantidad y precio -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <!-- Cantidad -->
+                          <div class="text-start">
+                            <label class="form-label fw-bold mb-1">Cantidad</label>
+                            <p class="text-muted mb-0" style="font-size: 1.1rem;">
+                                {{ caseitem.quantity }} unidad{{ caseitem.quantity|pluralize:"es" }}
+                            </p>
+                        </div>
+                  
+                          <!-- Precio total -->
+                          <div class="text-end">
+                            <label class="form-label fw-bold mb-1">Precio Total</label>
+                            <p class="text-dark fw-bold mb-0" style="font-size: 1.3rem;">
+                              {{ caseitem.price|multiply:caseitem.quantity }}0 <i class="fas fa-euro-sign"></i>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+              </div>
+              <!-- Single item -->
+              <hr class="my-4" />
+              {% endfor %}
+              
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-body">
+              <p><strong>Fecha estimada de entrega</strong></p>
+              <p class="mb-0">{{estimated_delivery_init}} - {{estimated_delivery_end}}</p>
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body">
+              <p><strong>Metodos de pago disponibles</strong></p>
+              <img src="/static/img/paypal.png" alt="PayPal Logo" style="width: 6rem; height: auto; margin-left: 0.5rem;"/>
+              <img src="/static/img/visa.png" alt="PayPal Logo" style="width: 4rem; height: auto; margin-left: 0.5rem;"/>
+              <img src="/static/img/mastercard.png" alt="PayPal Logo" style="width: 4rem; height: auto; margin-left: 0.5rem;"/>
+
+            </div>
+          </div>
+          <a href="{% url 'home' %}" class="btn btn-success btn mt-3 ml-3">
+            Seguir comprando
+        </a>
+        
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Resumen del pedido</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                  Productos
+                  <span>{{total_cart}}<i class="fa-solid fa-euro-sign"></i></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Envio
+                  <span>Gratis</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                  <div>
+                    <strong>Precio total</strong>
+                  </div>
+                  <span><strong>{{total_cart}} <i class="fa-solid fa-euro-sign"></i></strong></span>
+                </li>
+              </ul>
+  
+              <a href="{% url 'order_create' %}" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block">
+                Finalizar pedido
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}

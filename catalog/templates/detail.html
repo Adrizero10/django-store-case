@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ case.name }}
+{% endblock %}
+
+{% block ico %}
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/ico/detail.ico' %}" type="image/x-icon">
+{% endblock %}
+
+{% block content %}
+<section class="container mt-4">
+    <h1 class="text-primary border-bottom border-dark mb-5">iPhone Case</h1>
+
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-sm-4 mb-4">
+            <img src="{% static case.path_to_cover_image.url %}" class="img-fluid card-img-top" alt="{{ case.name }}">
+        </div>
+
+        <!-- Detalles del producto -->
+        <div class="col-sm-8">
+            <h3>{{ case.name }} - {{ case.color }}</h3>
+            <div class="d-flex flex-column pt-4 pb-3">
+                <div class="mb-3">
+                    <h5 class="text-secondary"><i class="fas fa-euro-sign"></i> Precio</h5>
+                    <h4 class="text-success">{{ case.price }} <i class="fas fa-euro-sign"></i></h4>
+                </div>
+                <div class="mb-3">
+                    <h5 class="text-secondary"><i class="fa-solid fa-star"></i> Valoración</h5>
+                    <h4 id="score" class="text-primary" data-score="{{ case.score }}">
+                        {{ case.score }} <span class="star-rating"></span>
+                      </h4>
+                </div>
+                <div class="mb-3">
+                    <h5 class="text-secondary"><i class="fas fa-mobile-alt"></i> Modelo</h5>
+                    <h4 class="text-primary">{{ case.model }}</h4>
+                </div>
+                <div class="mb-4">
+                    <h5 class="text-secondary"><i class="fas fa-palette"></i> Color</h5>
+                    <h4 class="text-primary">{{ case.color }}</h4>
+                </div>
+            </div>
+
+            <div class="collapse" id="Description">
+                <div class="card card-body">{{ case.description }}</div>
+            </div>
+
+            {% if case.number_copies_stock %}
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle"></i> Disponible
+                </div>
+                <form action="{% url 'cart_add' slug=case.slug %}" method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex bd-highlight">
+                        {{ formQuantity.quantity }}
+                        <input type="submit" class="btn btn-outline-success ml-1" value="Añadir al carrito">
+                    </div>
+                </form>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-circle"></i> Temporalmente sin stock
+                </div>
+                <button class="btn btn-outline-secondary" disabled>Añadir al carrito</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Comentarios -->
+    <div class="mt-5">
+        <h2 class="border-bottom border-dark">Comentarios</h2>
+        <div class="container">
+            {% if comment %}
+                {% for comments in comment %}
+                    <div class="callout callout-primary">
+                        <h4 class="text-primary"><i class="fas fa-user mr-2"></i>{{ comments.user }}</h4>
+                        <p class="text-secondary">{{ comments.date_time }}</p>
+                        <p>{{ comments.msg }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="callout callout-primary">
+                    <h3 class="text-secondary"><i class="fas fa-sad-tear mr-2"></i> No hay comentarios aún</h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Formulario para agregar un comentario -->
+    <div class="mt-4">
+        <h4 class="mb-3">Deja un comentario</h4>
+        <form method="POST" class="needs-validation" action="{% url 'add_comment' %}" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="message" class="form-label">Tu comentario</label>
+                <textarea class="form-control" id="message" name="message" rows="4" placeholder="Escribe tu comentario aquí..." required></textarea>
+                <input type="hidden" name="case_id" value="{{ case.id }}">
+                <div class="invalid-feedback">Por favor, introduce tu comentario.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Añadir comentario
+            </button>
+        </form>
+        <a href="{% url 'home' %}" class="btn btn-success btn mt-3">
+            Seguir comprando
+        </a>
+    </div>
+
+</section>
+
+<script>
+    $(document).ready(function() {
+        var score = $('#score').data('score');
+        var stars = '';
+        for (let i = 0; i < score; i++) {
+            stars += '<i class="fas fa-star text-warning"></i>';
+        }
+        $('#score .star-rating').html(stars);
+    });
+</script>
+
+{% endblock content %}
