@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,9 +30,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', "eu09(ilk6@4sfdofb=b_2ht@vad*$e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Turn this True for see in localhost
-DEBUG = True 
+DEBUG = False 
 
-ALLOWED_HOSTS = [ '127.0.0.1','localhost']
+ALLOWED_HOSTS = [ '127.0.0.1','localhost','iphonecase.es', 'www.iphonecase.es']
 
 # Application definition
 
@@ -153,7 +152,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
