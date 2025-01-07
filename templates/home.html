@@ -28,7 +28,7 @@ Home
         
           <div class="col-md-4">
             <div class="card mb-4 box-shadow" style="border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
-              <a href= "{{ case.get_absolute_url }}"><img class="card-img-top"  src="{% static case.path_to_cover_image.url %}" style="height: 15rem; width:auto; margin-left: 8rem; margin-right: auto;" alt="{{ case.name }}"></a>
+              <a href= "{{ case.get_absolute_url }}"><img class="card-img-top"  src="{{ case.path_to_cover_image.url }}" style="height: 15rem; width:auto; margin-left: 8rem; margin-right: auto;" alt="{{ case.name }}"></a>
               <div class="card-body">
                 <a class="card-text text-decoration-none text-primary fw-bold" href="{{ case.get_absolute_url }}">
                   {{ case.name }}

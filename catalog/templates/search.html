@@ -43,7 +43,7 @@ Buscar Fundas
                     <td class="align-middle">
                         <a href="{{ case.get_absolute_url }}">
                             <img class="img-fluid rounded shadow-sm" 
-                                 src="{% static case.path_to_cover_image.url %}" 
+                                 src="{{ case.path_to_cover_image.url }}" 
                                  alt="{{ case.name }}" 
                                  style="width: 100px; height: auto;" />
                         </a>
