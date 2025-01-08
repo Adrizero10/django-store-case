@@ -10,113 +10,124 @@
 {% endblock %}
 
 {% block content %}
-<section class="container mt-4">
-    <h1 class="text-primary border-bottom border-dark mb-5">iPhone Case</h1>
+<section class="container mt-5">
+    <!-- Título -->
+    <h1 class="text-center text-primary border-bottom border-dark pb-3 mb-5">
+        iPhone Case
+    </h1>
 
     <div class="row">
         <!-- Imagen del producto -->
-        <div class="col-sm-4 mb-4">
-            <img src="{{ case.path_to_cover_image.url }}" class="img-fluid card-img-top" alt="{{ case.name }}">
+        <div class="col-md-6 mb-4">
+            <img src="{{ case.path_to_cover_image.url }}" class="img-fluid shadow-lg rounded" alt="{{ case.name }}">
         </div>
 
         <!-- Detalles del producto -->
-        <div class="col-sm-8">
-            <h3>{{ case.name }} - {{ case.color }}</h3>
+        <div class="col-md-6">
+            <h2 class="text-dark fw-bold">{{ case.name }} - {{ case.color }}</h2>
             <div class="d-flex flex-column pt-4 pb-3">
-                <div class="mb-3">
-                    <h5 class="text-secondary"><i class="fas fa-euro-sign"></i> Precio</h5>
-                    <h4 class="text-success">{{ case.price }} <i class="fas fa-euro-sign"></i></h4>
+                <div class="mb-4">
+                    <h5 class="text-secondary"><i class="fas fa-tag"></i> Precio</h5>
+                    <h3 class="text-success fw-bold">{{ case.price }} <i class="fas fa-euro-sign"></i></h3>
                 </div>
-                <div class="mb-3">
-                    <h5 class="text-secondary"><i class="fa-solid fa-star"></i> Valoración</h5>
+                <div class="mb-4">
+                    <h5 class="text-secondary"><i class="fas fa-star"></i> Valoración</h5>
                     <h4 id="score" class="text-primary" data-score="{{ case.score }}">
                         {{ case.score }} <span class="star-rating"></span>
-                      </h4>
+                    </h4>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <h5 class="text-secondary"><i class="fas fa-mobile-alt"></i> Modelo</h5>
-                    <h4 class="text-primary">{{ case.model }}</h4>
+                    <h4 class="text-primary fw-bold">{{ case.model }}</h4>
                 </div>
                 <div class="mb-4">
                     <h5 class="text-secondary"><i class="fas fa-palette"></i> Color</h5>
-                    <h4 class="text-primary">{{ case.color }}</h4>
+                    <h4 class="text-primary fw-bold">{{ case.color }}</h4>
                 </div>
             </div>
 
-            <div class="collapse" id="Description">
-                <div class="card card-body">{{ case.description }}</div>
-            </div>
 
+            <!-- Disponibilidad y botón de compra -->
             {% if case.number_copies_stock %}
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle"></i> Disponible
+            <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                <i class="fas fa-check-circle me-2"></i> Disponible
+            </div>
+            <form id="addToCartForm" action="{% url 'cart_add' slug=case.slug %}" method="POST" class="d-flex align-items-center gap-2">
+                {% csrf_token %}
+                <div class="form-group mb-0">
+                    <input
+                        id="quantityInput"
+                        name="{{ formQuantity.quantity.name }}"
+                        type="number"
+                        class="form-control w-auto"
+                        min="1"
+                        value="1"
+                        placeholder="Cantidad"
+                    />
                 </div>
-                <form action="{% url 'cart_add' slug=case.slug %}" method="POST">
-                    {% csrf_token %}
-                    <div class="d-flex bd-highlight">
-                        {{ formQuantity.quantity }}
-                        <input type="submit" class="btn btn-outline-success ml-1" value="Añadir al carrito">
-                    </div>
-                </form>
+                <button type="submit" id="addToCartButton" class="btn btn-success d-flex align-items-center">
+                    <i class="fas fa-cart-plus me-2"></i> Añadir al carrito
+                </button>
+            </form>
+            
             {% else %}
-                <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-circle"></i> Temporalmente sin stock
-                </div>
-                <button class="btn btn-outline-secondary" disabled>Añadir al carrito</button>
+            <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> Temporalmente sin stock
+            </div>
+            <button class="btn btn-outline-secondary" disabled>Añadir al carrito</button>
             {% endif %}
         </div>
     </div>
 
     <!-- Comentarios -->
     <div class="mt-5">
-        <h2 class="border-bottom border-dark">Comentarios</h2>
-        <div class="container">
+        <h2 class="border-bottom border-dark pb-3 mb-4">Comentarios</h2>
+        <div>
             {% if comment %}
                 {% for comments in comment %}
-                    <div class="callout callout-primary">
-                        <h4 class="text-primary"><i class="fas fa-user mr-2"></i>{{ comments.user }}</h4>
-                        <p class="text-secondary">{{ comments.date_time }}</p>
-                        <p>{{ comments.msg }}</p>
-                    </div>
+                <div class="p-3 mb-3 border rounded bg-light shadow-sm">
+                    <h5 class="text-primary"><i class="fas fa-user me-2"></i>{{ comments.user }}</h5>
+                    <p class="text-muted small">{{ comments.date_time }}</p>
+                    <p>{{ comments.msg }}</p>
+                </div>
                 {% endfor %}
             {% else %}
-                <div class="callout callout-primary">
-                    <h3 class="text-secondary"><i class="fas fa-sad-tear mr-2"></i> No hay comentarios aún</h3>
+                <div class="p-3 mb-3 border rounded bg-light shadow-sm">
+                    <h5 class="text-muted"><i class="fas fa-comment-slash me-2"></i> No hay comentarios aún</h5>
                 </div>
             {% endif %}
         </div>
     </div>
 
     <!-- Formulario para agregar un comentario -->
-    <div class="mt-4">
-        <h4 class="mb-3">Deja un comentario</h4>
+    <div class="mt-5">
+        <h3 class="mb-4">Deja un comentario</h3>
         <form method="POST" class="needs-validation" action="{% url 'add_comment' %}" novalidate>
             {% csrf_token %}
             <div class="mb-3">
-                <label for="message" class="form-label">Tu comentario</label>
+                <label for="message" class="form-label fw-bold">Tu comentario</label>
                 <textarea class="form-control" id="message" name="message" rows="4" placeholder="Escribe tu comentario aquí..." required></textarea>
                 <input type="hidden" name="case_id" value="{{ case.id }}">
                 <div class="invalid-feedback">Por favor, introduce tu comentario.</div>
             </div>
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i> Añadir comentario
+                <i class="fas fa-paper-plane"></i> Enviar comentario
             </button>
         </form>
-        <a href="{% url 'home' %}" class="btn btn-success btn mt-3">
-            Seguir comprando
+        <a href="{% url 'home' %}" class="btn btn-outline-success mt-3">
+            <i class="fas fa-arrow-left"></i> Seguir comprando
         </a>
     </div>
-
 </section>
 
 <script>
-    $(document).ready(function() {
-        var score = $('#score').data('score');
-        var stars = '';
+    document.addEventListener('DOMContentLoaded', function () {
+        const score = document.getElementById('score').dataset.score;
+        let stars = '';
         for (let i = 0; i < score; i++) {
             stars += '<i class="fas fa-star text-warning"></i>';
         }
-        $('#score .star-rating').html(stars);
+        document.querySelector('#score .star-rating').innerHTML = stars;
     });
 </script>
 

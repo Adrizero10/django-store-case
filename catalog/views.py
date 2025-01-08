@@ -22,9 +22,30 @@ def homeCasesListView(request):
     cases = IphoneCase.objects.all()
     cases_topScore = IphoneCase.objects.order_by(
         '-score').values_list('id', flat=True)[:5]
+    # Lista predefinida para ordenar los modelos de iPhone
+    model_order = [
+        "16 Pro Max", "16 Pro", "16", 
+        "15 Pro Max", "15 Pro", "15", 
+        "14 Pro Max", "14 Pro", "14", 
+        "13 Pro Max", "13 Pro", "13"
+    ]
+
+    # Lista predefinida para ordenar los colores
+    color_order = [
+        "Negro", "Blanco", "Azul", "Rojo", "Dorado", "Verde", "Morado", "Plateado"
+    ]
+
+    # Obtener modelos y colores únicos
+    models = IphoneCase.objects.all().values_list('model', flat=True).distinct()
+    models = sorted(set(models), key=lambda x: model_order.index(x) if x in model_order else len(model_order))
+
+    colors = IphoneCase.objects.all().values_list('color', flat=True).distinct()
+    colors = sorted(set(colors), key=lambda x: color_order.index(x) if x in color_order else len(color_order))
+
+
     
     template_name = 'home.html'
-    context = {'cases': cases, 'cases_topScore': cases_topScore,
+    context = {'cases': cases, 'cases_topScore': cases_topScore, 'models': models, 'colors': colors,
                 }
 
     return render(request, template_name, context)

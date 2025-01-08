@@ -53,73 +53,69 @@
 </style>
 
    <header >
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style=" padding-left: 2rem; padding-right: 2rem;">
-      <!-- Logo y enlace al inicio -->
-        <a href="{% url 'home' %}" class="navbar-brand">
-          <i class="fas fa-home fa-lg pr-2"></i> <strong>iCase</strong>
-        </a>
-    
-        <!-- Botón hamburguesa -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-    
-<!-- Contenido colapsable -->
-<div class="collapse navbar-collapse" id="navbarsExample03">
-  <ul class="navbar-nav ms-auto align-items-center">
-    {% if user.is_authenticated %}
-    <!-- Carrito de compras -->
-    <li class="nav-item" style="padding-right: 1rem; padding-left: 1rem;">
-      {% if cart|length == 0 %}
-      <a href="{% url 'cart_list' %}" class="nav-link text-warning">
-        Cesta vacío <i class="fas fa-shopping-cart"></i>
-      </a>
-      {% else %}
-      <a href="{% url 'cart_list' %}" class="nav-link text-warning">
-        <i class="fas fa-shopping-cart"></i> x{{ cart|length }} Ir al cesta
-      </a>
-      {% endif %}
-    </li>
 
-    <!-- Menú de usuario -->
-    <li class="nav-item" style="padding-right: 1rem; padding-left: 1rem;">
-      <form method="POST" action="{% url 'logout' %}" class="d-inline-block">
-        {% csrf_token %}
-        <button type="submit" class="nav-link btn btn-link text-light p-0">
-          <i class="fas fa-sign-out-alt me-1"></i> Log Out
-        </button>
-      </form>
-    </li>
-    <li class="nav-item">
-      <span class="nav-link text-info fw-bold">
-        <i class="fas fa-user"></i> {{ user.username }}
-      </span>
-    </li>
-    {% else %}
-    <!-- Opciones de Login/Signup para usuarios no autenticados -->
-    <li class="nav-item" style="padding-right: 1rem; padding-left: 1rem;">
-      <a href="{% url 'login' %}" class="nav-link text-success">
-        <i class="fas fa-user"></i> Log In
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 py-3 shadow-sm">
+      <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center ml-3">
+        <i class="fas fa-home fa-lg me-2"></i>
+        <span class="fw-bold">iCase</span>
       </a>
-    </li>
-    <li class="nav-item">
-      <a href="{% url 'signup' %}" class="nav-link text-warning">
-        <i class="fas fa-user-plus"></i> Sign Up
-      </a>
-    </li>
-    {% endif %}
-  </ul>
-</div>
-      </nav>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav  ms-auto align-items-center">
+          {% if user.is_authenticated %}
+
+          <li class="nav-item me-4">
+            <a href="{% url 'cart_list' %}" class="nav-link btn btn-warning position-relative py-2 px-3 text-dark fw-bold d-flex align-items-center" style="border-radius: 30px;">
+              <i class="fas fa-shopping-cart fa-lg me-2"></i>
+              {% if cart|length == 0 %}
+              Cesta vacía
+              {% else %}
+              Ir a la cesta
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ cart|length }} 
+                <span class="visually-hidden">productos en la cesta</span>
+              </span>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item me-4 mt-1">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle fa-lg me-2"></i>{{ user.username }}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <form method="POST" action="{% url 'logout' %}" class="dropdown-item m-0 p-0 ">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-link text-decoration-none text-dark p-1" style="font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                  </button>
+                </form>
+              </div>
+            </div>
+            {% else %}
+
+          <!-- Opciones de Login/Signup para usuarios no autenticados -->
+          <li class="nav-item me-4">
+            <a href="{% url 'login' %}" class="nav-link btn btn-success text-white position-relative py-2 px-3 fw-bold d-flex align-items-center" style="border-radius: 30px;">
+              <i class="fas fa-sign-in-alt me-1"></i> Log In
+            </a>
+          </li>
+          <li class="nav-item me-4 mt-1">
+            <a href="{% url 'signup' %}" class="nav-link btn btn-warning position-relative py-2 px-3 text-dark fw-bold d-flex align-items-center" style="border-radius: 30px;">
+              <i class="fas fa-user-plus me-1"></i> Sign Up
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
     </header>
     
 
-
-
-
-
-
-   
    <!-- Contenido principal -->
    <div class="mt-4 pt-3">
       {% block content %}
@@ -133,6 +129,7 @@
          <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2 text-muted">Home</a></li>
          <li class="nav-item"><a href="{% url 'cart_list' %}" class="nav-link px-2 text-muted">Cart</a></li>
          <li class="nav-item"><a href="{% url 'about' %}" class="nav-link px-2 text-muted">About</a></li>
+         <li class="nav-item"><a href="" class="nav-link px-2 text-muted">Terms and conditions</a></li>
       </ul>
       <p class="text-center text-muted">&copy; 2024 iPhone Cases, Inc</p>
    </footer>

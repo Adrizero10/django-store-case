@@ -31,7 +31,7 @@ class IphoneCase(models.Model):
                              verbose_name='Name', unique=True)
 
     model = models.CharField(max_length=256, null=True,
-                             verbose_name='Model', unique=True)
+                             verbose_name='Model', unique=False)
     
     color = models.CharField(max_length=256, null=True,
                             verbose_name='Color', unique=True)
@@ -79,8 +79,11 @@ class IphoneCase(models.Model):
         # with your name to ensure that it will always be unique
         # Since Epoch date
         if not self.slug:
-            self.slug = slugify(
-                str(datetime.now().timestamp()) + "-" + self.name)
+            self.slug = slugify(self.name)
+        
+        self.model = self.model.title()
+        self.color = self.color.title()
+        self.name = self.name.title()
 
         return super().save(*args, **kwargs)
 

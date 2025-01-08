@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', "eu09(ilk6@4sfdofb=b_2ht@vad*$e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Turn this True for see in localhost
-DEBUG = False 
+DEBUG = True 
 
 ALLOWED_HOSTS = [ '127.0.0.1','localhost','iphonecase.es', 'www.iphonecase.es']
 

@@ -10,5 +10,7 @@ class CustomPayPalPaymentsForm(PayPalPaymentsForm):
                 <img src="/static/img/paypal.png" alt="PayPal Logo" style="width: 6rem; height: auto; margin-left: 0.5rem;"/>
             </button>
             <p class= "mt-2 ml-2">Puede pagar con tarjeta de crédito o débido a través de PayPal</p>
+            <p class= "mt-2 ml-2">Seleccione la opción <strong>Pagar con tarjeta de crédito o débito</strong></p>
+
 """
                     )

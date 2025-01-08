@@ -12,52 +12,217 @@ Home
 {% block content %}
 <section class="container mt-4">
 
+
+
   <section class="jumbotron text-center">
     <div class="container">
       <h1 class="jumbotron-heading">Iphone Cases</h1>
-      <p class="lead text-muted">Las mejoras fundas de Iphone de silicona al mejor precio <strong>envio en 3-5 dias</strong></p>
+      <p class="lead text-muted">Explora nuestra colección de fundas de iPhone. Filtra por modelo o color para encontrar la funda perfecta para ti. <strong>Envío rápido: 3-5 días</strong>.</p>
     </div>
   </section>
 
-  {% if cases %}
-    <div class="mt-2">
-      <div class="album py-5">
-        <div class="container">
-          <div class="row">
-        {% for case in cases %}
-        
-          <div class="col-md-4">
+  <!-- Alert container -->
+<div id="alertContainer" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1050; display: none;"></div>
+
+   <!-- Sección inicial: Encuentra tu funda perfecta -->
+   <section class="jumbotron text-center mt-5">
+    <div class="container">
+      <h2 class="jumbotron-heading">¡Encuentra tu funda perfecta!</h2>
+      <p class="lead text-muted">Selecciona tu modelo y color para encontrar la funda ideal.</p>
+    </div>
+  </section>
+
+  <!-- Sección de selección de modelo -->
+  <div class="text-center mb-4" id="modelSelection">
+    <h4 class="mb-3">Selecciona tu modelo</h4>
+    <div class="d-flex justify-content-center flex-wrap">
+      {% for model in models %}
+      <button class="btn btn-outline-primary m-1 model-filter" data-model="{{ model|lower }}">{{ model }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Sección de selección de color -->
+  <div class="text-center mb-4" id="colorSelection" style="display: none;">
+    <h4 class="mb-3">Selecciona el color</h4>
+    <div class="d-flex justify-content-center flex-wrap">
+      {% for color in colors %}
+      <button class="btn btn-outline-secondary m-1 color-filter" data-color="{{ color|lower }}">{{ color }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Botón de reset -->
+  <div class="text-center mb-4">
+    <button class="btn btn-warning" id="resetFilters">Resetear filtros</button>
+  </div>
+
+  <!-- Sección de fundas disponibles -->
+  <div class="mt-4" id="caseSection">
+    <div class="album py-5">
+      <div class="container">
+        <div class="row gx-2 gy-3" id="caseContainer">
+          {% for case in cases %}
+          <div class="col-12 col-sm-6 col-md-4 case-item" data-model="{{ case.model|lower }}" data-color="{{ case.color|lower }}">
             <div class="card mb-4 box-shadow" style="border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
-              <a href= "{{ case.get_absolute_url }}"><img class="card-img-top"  src="{{ case.path_to_cover_image.url }}" style="height: 15rem; width:auto; margin-left: 8rem; margin-right: auto;" alt="{{ case.name }}"></a>
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <a href="{{ case.get_absolute_url }}">
+                  <img class="card-img-top" src="{{ case.path_to_cover_image.url }}" style="height: auto; max-height: 15rem; width: auto; max-width: 100%;" alt="{{ case.name }}">
+                </a>
+              </div>
               <div class="card-body">
                 <a class="card-text text-decoration-none text-primary fw-bold" href="{{ case.get_absolute_url }}">
                   {{ case.name }}
                 </a>
-                  <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                  </div>
-                  <small class="text-muted">{{case.model}} - {{case.color}}</small>
-                </div>
+                <p class="text-muted mb-2">Precio: <strong>{{ case.price }} <i class="fas fa-euro-sign"></i></strong></p>
+                <small class="text-muted">{{ case.model }} | {{ case.color }}</small>
               </div>
             </div>
           </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
-  {% else %}
-    <div class="card m-auto" style="width: 18rem;">
-      <img src="{% static 'img/perro-ewok.gif' %}" class="card-img-top" alt="perro-ewok">
-      <div class="card-body">
-        <h5 class="card-title">Ou... It seems that there are no cases available</h5>
-        <a href="https://youtu.be/000al7ru3ms" class="btn btn-primary" target="_blank">Go somewhere</a>
-      </div>
-    </div>
-    
-    <div class="alert alert-danger mt-4" role="alert">
-      <i class="fas fa-exclamation-triangle"></i> No cases X_x
-    </div>
-  {% endif %}
 
 </section>
+
+<!-- Script para filtrar las fundas por modelo y color con interacción refinada -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const modelFilters = document.querySelectorAll('.model-filter');
+  const colorFilters = document.querySelectorAll('.color-filter');
+  const caseItems = document.querySelectorAll('.case-item');
+  const colorSelection = document.getElementById('colorSelection');
+  const resetButton = document.getElementById('resetFilters');
+
+  let selectedModel = 'all';
+  let selectedColor = 'all';
+
+  // Manejar clic en los filtros de modelo
+  modelFilters.forEach(button => {
+    button.addEventListener('click', function () {
+      selectedModel = this.dataset.model;
+
+      // Resetear el filtro de color
+      selectedColor = 'all';
+      resetColorFilters();
+
+      colorSelection.style.display = 'block'; // Mostrar selección de color
+      updateCases(); // Actualizar fundas visibles
+    });
+  });
+
+  // Manejar clic en los filtros de color
+  colorFilters.forEach(button => {
+    button.addEventListener('click', function () {
+      selectedColor = this.dataset.color;
+      updateCases(); // Actualizar fundas visibles
+    });
+  });
+
+  // Función para actualizar fundas visibles y filtros de colores
+  function updateCases() {
+    const visibleColors = new Set();
+
+    caseItems.forEach(item => {
+      const matchesModel = selectedModel === 'all' || item.dataset.model === selectedModel;
+      const matchesColor = selectedColor === 'all' || item.dataset.color === selectedColor;
+
+      if (matchesModel && matchesColor) {
+        item.style.display = ''; // Mostrar funda
+        visibleColors.add(item.dataset.color); // Registrar colores visibles
+      } else {
+        item.style.display = 'none'; // Ocultar funda
+      }
+    });
+
+    updateColorFilters(visibleColors); // Actualizar botones de color
+  }
+
+  // Función para actualizar botones de color según fundas visibles
+  function updateColorFilters(availableColors) {
+    colorFilters.forEach(button => {
+      const color = button.dataset.color;
+
+      if (color === 'all' || availableColors.has(color)) {
+        button.style.opacity = '1';
+        button.style.pointerEvents = 'auto';
+      } else {
+        button.style.opacity = '0.5';
+        button.style.pointerEvents = 'none';
+      }
+    });
+  }
+
+  // Función para resetear filtros de color
+  function resetColorFilters() {
+    colorFilters.forEach(button => {
+      button.classList.remove('active');
+      button.style.opacity = '1';
+      button.style.pointerEvents = 'auto';
+    });
+  }
+
+  // Función para resetear todos los filtros
+  function resetFilters() {
+    selectedModel = 'all';
+    selectedColor = 'all';
+
+    // Mostrar todas las fundas
+    caseItems.forEach(item => {
+      item.style.display = '';
+    });
+
+    // Restaurar filtros de modelo y color
+    modelFilters.forEach(button => {
+      button.classList.remove('active');
+    });
+
+    resetColorFilters();
+
+    // Ocultar selección de color
+    colorSelection.style.display = 'none';
+  }
+
+  // Manejar clic en el botón de reset
+  resetButton.addEventListener('click', resetFilters);
+
+  // Inicializar con todas las fundas visibles
+  updateCases();
+});
+
+
+
+</script>
+
+<style>
+  /* Ajustes para optimización móvil */
+  @media (max-width: 768px) {
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .case-item {
+      margin-bottom: 1rem;
+    }
+
+    .card-img-top {
+      max-height: 10rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .d-flex {
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
+
 {% endblock content %}
