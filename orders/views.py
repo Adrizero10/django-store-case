@@ -16,6 +16,11 @@ from paypal.standard.forms import PayPalPaymentsForm
 import stripe
 from django.http import JsonResponse
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
+from email.message import EmailMessage
+import ssl
+import smtplib
 
 @login_required
 def cart_add(request, slug):
@@ -27,6 +32,7 @@ def cart_add(request, slug):
         Author : Adrian Crespo Musheghyan
     """
     cart = Cart(request)
+
 
     if request.method == 'POST':
         form = CartAddIphoneCaseForm(request.POST)
@@ -90,13 +96,23 @@ def get_cart(request):
 
 
 
-def send_order_confirmation_email(user_email, order_details):
-    subject = 'Order confirm'
-    message = 'Order num 123123'
-    recipient_list = ['adrizero2001@gmail.com', user_email]
-    email = EmailMessage(subject, message, settings.EMAIL_HOST_USER, recipient_list)
+def send_order_confirmation_email(email_reciever, order_id):
+    load_dotenv()
+    password = os.getenv('EMAIL_PASSWORD')
+    password = "uiqr mnnz ebep polu"
+    email_sender = "iphonecasemarketorders@gmail.com"
 
-    email.send()
+    em = EmailMessage()
+    em.set_content('Order number: ' + str(order_id) + ' has been created')
+    em['Subject'] = 'Order confirmation'
+    em['From'] = email_sender
+    em['To'] = email_reciever
+    
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(email_sender, password)
+        server.sendmail(email_sender, email_reciever, em.as_string())
 
 
 @login_required
@@ -124,7 +140,7 @@ def order_create(request):
                 newItem.save()
 
             cart.clear()
-            """send_order_confirmation_email(form.cleaned_data['email'],order.id)"""
+            send_order_confirmation_email(form.cleaned_data['email'],order.id)
 
             template_name = 'created.html'
             context = {'orderid': order.id, }
@@ -168,25 +184,31 @@ def order_create(request):
     return render(request, template_name, context)
 
 def PaymentSuccessful(request):
-    return render(request, 'created.html')
+
+    cart = Cart(request)
+    cartItems = cart.cart
+
+    order = Order.objects.create(
+        first_name=request.user.first_name,
+        last_name=request.user.last_name,
+        email=request.user.email,
+        address="Dirección de prueba",  # Deberías recuperar esto de la sesión o la base de datos
+        postal_code="00000",
+        city="Ciudad de prueba"
+    )
+
+    for key, value in cartItems.items():
+        case = IphoneCase.objects.filter(id=key).first()
+        if case:
+            OrderItem.objects.create(order=order, case=case, price=value['price'], quantity=value['quantity'])
+
+    cart.clear()
+    send_order_confirmation_email(request.user.email, order.id)
+
+    return render(request, 'created.html', {'orderid': order.id})
 
 def PaymentFailed(request):
     return render(request, 'created.html')
-
-
-
-@login_required
-def order_created(request):
-    """Order cretated
-
-        Return: Order created template
-
-        Author : Adrian Crespo Musheghyan
-    """
-    template_name = 'created.html'
-    context = {}
-
-    return render(request, template_name, context)
 
 
 
@@ -201,7 +223,7 @@ def handle_paypal_ipn(request):
     if request.POST != {}:
         transaccion = TransaccionPaypal(
             payer_id=request.POST['payer_id'],
-            payment_date=strotime(request.POST['payment_date']),
+            payment_date=strfotime(request.POST['payment_date']),
             payment_status=request.POST['payment_status'],
             quantity=request.POST['quantity'],
             invoice=request.POST['invoice'],
@@ -229,6 +251,19 @@ def strfotime(i_time:str):
 
     return datetime(int(year),int(meses.index(month)) + 1, int(day), int(hora), int(min), int(seg))
 
+
+@login_required
+def order_created(request):
+    """Order cretated
+
+        Return: Order created template
+
+        Author : Adrian Crespo Musheghyan
+    """
+    template_name = 'created.html'
+    context = {}
+
+    return render(request, template_name, context)
 
 
 @login_required

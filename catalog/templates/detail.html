@@ -18,9 +18,10 @@
 
     <div class="row">
         <!-- Imagen del producto -->
-        <div class="col-md-6 mb-4">
-            <img src="{{ case.path_to_cover_image.url }}" class="img-fluid shadow-lg rounded" alt="{{ case.name }}">
+        <div class="col-sm-4 mb-4">
+            <img src="{{ case.path_to_cover_image.url }}" class="img-fluid card-img-top" alt="{{ case.name }}">
         </div>
+
 
         <!-- Detalles del producto -->
         <div class="col-md-6">
@@ -52,14 +53,14 @@
             <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
                 <i class="fas fa-check-circle me-2"></i> Disponible
             </div>
-            <form id="addToCartForm" action="{% url 'cart_add' slug=case.slug %}" method="POST" class="d-flex align-items-center gap-2">
+            <form id="addToCartForm" action="{% url 'cart_add' slug=case.slug %}" method="POST" class="d-flex align-items-center gap-2 ">
                 {% csrf_token %}
-                <div class="form-group mb-0">
+                <div class="form-group" style="width: 20%;">
                     <input
                         id="quantityInput"
                         name="{{ formQuantity.quantity.name }}"
                         type="number"
-                        class="form-control w-auto"
+                        class="form-control"
                         min="1"
                         value="1"
                         placeholder="Cantidad"

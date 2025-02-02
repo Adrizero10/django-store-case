@@ -62,24 +62,35 @@ Home
     <div class="album py-5">
       <div class="container">
         <div class="row gx-2 gy-3" id="caseContainer">
-          {% for case in cases %}
-          <div class="col-12 col-sm-6 col-md-4 case-item" data-model="{{ case.model|lower }}" data-color="{{ case.color|lower }}">
-            <div class="card mb-4 box-shadow" style="border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <a href="{{ case.get_absolute_url }}">
-                  <img class="card-img-top" src="{{ case.path_to_cover_image.url }}" style="height: auto; max-height: 15rem; width: auto; max-width: 100%;" alt="{{ case.name }}">
-                </a>
-              </div>
-              <div class="card-body">
-                <a class="card-text text-decoration-none text-primary fw-bold" href="{{ case.get_absolute_url }}">
-                  {{ case.name }}
-                </a>
-                <p class="text-muted mb-2">Precio: <strong>{{ case.price }} <i class="fas fa-euro-sign"></i></strong></p>
-                <small class="text-muted">{{ case.model }} | {{ case.color }}</small>
-              </div>
-            </div>
+          
+          {% regroup cases by model as grouped_cases %}
+          
+          {% for group in grouped_cases %}
+          <div class="col-12">
+            <h2 class="model-heading my-4" data-model="{{ group.grouper|lower }}" style="color: gray;">iPhone {{ group.grouper }}</h2>
           </div>
+            
+            {% for case in group.list %}
+              <div class="col-12 col-sm-6 col-md-4 case-item" data-model="{{ case.model|lower }}" data-color="{{ case.color|lower }}">
+                <div class="card mb-4 box-shadow" style="border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <a href="{{ case.get_absolute_url }}">
+                      <img class="card-img-top" src="{{ case.path_to_cover_image.url }}" style="height: auto; max-height: 15rem; width: auto; max-width: 100%;" alt="{{ case.name }}">
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <a class="card-text text-decoration-none text-primary fw-bold" href="{{ case.get_absolute_url }}">
+                      {{ case.name }}
+                    </a>
+                    <p class="text-muted mb-2">Precio: <strong>{{ case.price }} <i class="fas fa-euro-sign"></i></strong></p>
+                    <small class="text-muted">{{ case.model }} | {{ case.color }}</small>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          
           {% endfor %}
+          
         </div>
       </div>
     </div>
@@ -89,12 +100,14 @@ Home
 
 <!-- Script para filtrar las fundas por modelo y color con interacción refinada -->
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
   const modelFilters = document.querySelectorAll('.model-filter');
   const colorFilters = document.querySelectorAll('.color-filter');
   const caseItems = document.querySelectorAll('.case-item');
   const colorSelection = document.getElementById('colorSelection');
   const resetButton = document.getElementById('resetFilters');
+  const modelHeadings = document.querySelectorAll('.model-heading');
 
   let selectedModel = 'all';
   let selectedColor = 'all';
@@ -124,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Función para actualizar fundas visibles y filtros de colores
   function updateCases() {
     const visibleColors = new Set();
+    const visibleModels = new Set();
 
     caseItems.forEach(item => {
       const matchesModel = selectedModel === 'all' || item.dataset.model === selectedModel;
@@ -132,12 +146,26 @@ document.addEventListener('DOMContentLoaded', function () {
       if (matchesModel && matchesColor) {
         item.style.display = ''; // Mostrar funda
         visibleColors.add(item.dataset.color); // Registrar colores visibles
+        visibleModels.add(item.dataset.model); // Registrar modelo visible
       } else {
         item.style.display = 'none'; // Ocultar funda
       }
     });
 
     updateColorFilters(visibleColors); // Actualizar botones de color
+    updateModelHeadings(visibleModels); // Ocultar o mostrar encabezados de modelo
+  }
+
+  // Función para actualizar encabezados de modelo
+  function updateModelHeadings(availableModels) {
+    modelHeadings.forEach(heading => {
+      const modelName = heading.dataset.model.trim().toLowerCase().replace('iphone ', '');
+      if (availableModels.has(modelName) || selectedModel === 'all') {
+        heading.style.display = ''; // Mostrar encabezado si hay fundas visibles
+      } else {
+        heading.style.display = 'none'; // Ocultar encabezado si no hay fundas visibles
+      }
+    });
   }
 
   // Función para actualizar botones de color según fundas visibles
@@ -180,9 +208,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     resetColorFilters();
-
-    // Ocultar selección de color
     colorSelection.style.display = 'none';
+
+    // Restaurar encabezados de modelo
+    modelHeadings.forEach(heading => {
+      heading.style.display = '';
+    });
   }
 
   // Manejar clic en el botón de reset
@@ -191,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Inicializar con todas las fundas visibles
   updateCases();
 });
-
 
 
 </script>

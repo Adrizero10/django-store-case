@@ -102,10 +102,6 @@ Cart
                         <img src="/static/img/mastercard.png" alt="Mastercard Logo" style="width: 4rem; height: auto; margin-left: 0.5rem;"/>
                     </div>
                 </div>
-
-                <a href="{% url 'home' %}" class="btn btn-success btn mt-3">
-                    Seguir comprando
-                </a>
             </div>
 
             <div class="col-12 col-md-4">
@@ -136,7 +132,14 @@ Cart
                 </div>
             </div>
         </div>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn mt-3">
+            Seguir comprando
+        </a>
     </div>
+
 </section>
 
 {% endblock content %}
+
+
+
