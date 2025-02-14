@@ -116,7 +116,7 @@ def send_order_confirmation_email(email_reciever, order_id):
 
 
 @login_required
-def order_create(request):
+def order_form(request):
     """Order create form
 
         Return: Form to create the order
@@ -139,13 +139,10 @@ def order_create(request):
                     id=key).first(), price=value['price'], quantity=value['quantity'])
                 newItem.save()
 
-            cart.clear()
-            send_order_confirmation_email(form.cleaned_data['email'],order.id)
 
             template_name = 'created.html'
             context = {'orderid': order.id, }
-
-            return render(request, template_name, context)
+            return redirect('https://www.paypal.com/cgi-bin/webscr')
     else:
         form = OrderCreateForm()
 
@@ -186,6 +183,10 @@ def order_create(request):
 def PaymentSuccessful(request):
 
     cart = Cart(request)
+
+    if not cart.cart:
+        return redirect('cart_list')  # Redirigir si el carrito está vacío
+    
     cartItems = cart.cart
 
     order = Order.objects.create(
@@ -239,17 +240,17 @@ def handle_paypal_ipn(request):
         transaccion.save()
     return HttpResponse(status=200)
 
-def strfotime(i_time:str):
+def strfotime(i_time: str):
+    meses = {name: index for index, name in enumerate(
+        "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), 1)}
     i_time_space = i_time.split(" ")
-    meses = "Jan_Feb_Mar_Apr_May_Jun_Jul_ Aug_Sep_Oct_Nov_Dec"
-    year = i_time_space[3]
-    month = i_time_space[1]
-    day = i_time_space[2].replace(',','')
-    hora = i_time_space[0].split(":")[0]
-    min = i_time_space[0].split(":")[1]
-    seg = i_time_space[0].split(":")[2]
+    year = int(i_time_space[3])
+    month = meses[i_time_space[1]]
+    day = int(i_time_space[2].replace(',', ''))
+    hora, min, seg = map(int, i_time_space[0].split(":"))
+    
+    return datetime(year, month, day, hora, min, seg)
 
-    return datetime(int(year),int(meses.index(month)) + 1, int(day), int(hora), int(min), int(seg))
 
 
 @login_required

@@ -14,4 +14,6 @@ urlpatterns = [
     path('catalog/<slug:slug>', views.detail, name='detail'),
     path('500/', views.pag_error500, name='error500'),
     path('add_comment/', views.add_comment, name='add_comment'),
+    path('lupita/', views.lupita, name='lupita'),
+
 ]

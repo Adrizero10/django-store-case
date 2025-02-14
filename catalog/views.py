@@ -162,3 +162,13 @@ def pag_error500(request):
     response = render(request, "error500.html")
     response.status_code = 500
     return response
+
+
+
+
+def lupita(request):
+    
+
+    template_name = 'lupita.html'
+    context = {}
+    return render(request, template_name, context)

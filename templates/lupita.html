@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lupita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{% static 'img/sanvalentin.png' %}");;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section {
+            background: white;
+            padding: 50px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+<audio id="myAudio" loop>
+    <source src="{% static 'audio/perfect.mp3' %}" type="audio/mp3">
+    Tu navegador no soporta el audio.
+</audio>
+
+<script>
+    document.addEventListener("click", () => {
+        let audio = document.getElementById("myAudio");
+        audio.play();
+    }, { once: true }); // Solo se ejecuta una vez
+</script>
+
+</head>
+<body>
+
+    <h1 style="color: white;">✨💖 Toca la pantalla para que la magia esté presente 💫</h1>
+
+    <div class="container">
+        <div class="section hidden">💖 Hola lupii 🌹, ¡qué coincidencia! Estás viendo esta web justo el día de San Valentín!!! 🎀 Bueno, entonces ya que estamos y para hacer brillar tus dotes de detective 🕵️‍♀️, voy a darte una sorpresita... 🎁</div>
+    
+        <div class="section hidden">🌍✈️ Oye bichi, ¿a dónde quieres viajar? Un viaje al Triángulo de las Bermudas 🏝️ para buscar tu pulsera fitness? o tal vez a Corea del Sur, comiendo pollito coreano 🍗 mientras acaricias a un perrito 🐶, te rascan la espalda 😌 y de postre tarta de queso 🍰 (y un poco de Adrián 😏). Todo es posible cuando sueñas 🤭😜.</div>
+    
+        <div class="section hidden">🧐 Bueno, a lo que íbamos... vamos a hacer un pequeño test 🧠✨ para saber si tus capacidades psicomentales son aptas para lo que se viene... 🤯</div>
+    
+        <div class="section hidden">💕 Nahh, es bromitaaa 😂</div>
+    
+        <div class="section hidden">🌙💕 Te quiero mucho, mi Lupita preciosa 💕</div>
+    
+        <div class="section hidden">📸 Te voy a dejar el álbum de fotos para que le eches un vistazo 👀✨ =></div>
+    
+        <iframe title="Widget Iframe" 
+        src="https://widgetviewer.photoconnector.net?widgetId=7e45a31d-13c6-4c17-a207-3829b93f2355&securityId=a41df154-42a2-4359-9adb-e194f1a78426&locale=es-ES" 
+        frameborder="0" 
+        allowfullscreen 
+        width="100%" 
+        height="400px">
+        </iframe>
+    
+        <div class="section hidden">🤗🌹 Da un abrazito al crack que tienes delante 😏</div>
+        <div class="section hidden">🤗 Otro abracito fuerte</div>
+        <div class="section hidden">🤗 Y otro más fuerte todavía</div>
+    
+        <div class="section hidden">🎉 Hoy es un día especial, es San Valentín 💘 y seguro que ya te he dado unas florecitas 🌺 para que estés más guapita con ellas 🤭. Quería decirte unas palabras, no me quiero extender mucho, algo cortito, como tú, que eres cortita, pero eres mi bichito bonito al que quiero muuuuucho 💖.</div>
+    
+        <div class="section hidden">🌊 Lupita, Lupita, aquí estamos, en Salobreña 🏖️. Me hubiera gustado que no coincidiera con este día, porque no vamos a poder hacer algo guay 🎡, aunque tú lo que quieres es que te dé tu regalito... 🎁😉</div>
+    
+        <div class="section hidden">⏳ Pero espera, aún nooo, voy a dedicarte las palabras que te he dicho antes, algo cortito... 🌹</div>
+    
+        <div class="section hidden">🤔 Ejemmmm..., ya voy ehhh </div>
+    
+        <div class="section hidden">💌 Lupita, este San Valentín tengo una sensación agridulce🌹. Me hubiera gustado planear algo bonito, pero por otra parte, estoy feliz de estar aquí contigo 🥰. Me alegro de compartir San Valentín y muchos otros momentos contigo. Los llenas de ilusión y alegría, te veo feliz y sonriendo y eso me hace sentir bien. Es una sensación extraña pero bonita (como tú) 💕.</div>
+    
+        <div class="section hidden">Quiero que sigas sonriendo siempre que te mire, quiero viajar por el mundo contigo, descubrir lugares increíbles y disfrutarlos juntos. No se me ocurre mejor compañera de aventuritas que tú. 💖</div>
+    
+
+        <video width="320" height="240" controls>
+            <source src="{% static 'videos/v1.MOV' %}" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+        </video>
+        
+        <video width="320" height="240" controls>
+            <source src="{% static 'videos/v2.MOV' %}" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+        </video>
+        
+        <img src="{% static 'img/fotiko.jpg' %}" alt="Foto especial" width="300">
+
+    
+    </div>
+    
+
+    <script>
+        const sections = document.querySelectorAll('.hidden');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+
+<style>
+    .heart {
+        position: fixed;
+        color: red;
+        font-size: 20px;
+        animation: fall 3s linear infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(-10px);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh);
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+
+    let lastScrollY = window.scrollY; // Guarda la posición anterior
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '❤️';
+        document.body.appendChild(heart);
+
+        // Posición aleatoria en la pantalla
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = '-20px';
+        heart.style.fontSize = Math.random() * (30 - 15) + 15 + 'px';
+
+        // Eliminamos el corazón después de que termine la animación
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
+    }
+
+    // Agregamos corazones cuando se hace scroll
+    document.addEventListener('scroll', () => {
+        let currentScrollY = window.scrollY;
+        
+        if (currentScrollY > lastScrollY) { // Solo si el usuario baja
+            createHeart();
+        }
+        
+        lastScrollY = currentScrollY; // Actualiza la última posición del scroll
+            });
+</script>
+
+
+</body>
+</html>

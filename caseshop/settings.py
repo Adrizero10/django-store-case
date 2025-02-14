@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', "eu09(ilk6@4sfdofb=b_2ht@vad*$e
 # Turn this True for see in localhost
 DEBUG = True 
 
-ALLOWED_HOSTS = [ '127.0.0.1','localhost','iphonecase.es', 'www.iphonecase.es']
+ALLOWED_HOSTS = [ '127.0.0.1','localhost','iphonecase.es', 'www.iphonecase.es','192.168.1.10']
 
 # Application definition
 

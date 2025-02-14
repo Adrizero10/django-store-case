@@ -20,7 +20,7 @@ Checkout
   <h2 class="text-primary mb-3">Shipping Address</h2>
 
   <div class="container">
-    <form class="row g-3" method="post">
+    <form class="row g-3" method="post" action="{% url 'checkout' %}">
       {% csrf_token %}
       {% for field in form %}
       <div class="mb-3 col-12">
@@ -54,6 +54,7 @@ Checkout
         </button>
       </div>
     </div>
+  </form>
   </div>
 </section>
 {% endblock %}
