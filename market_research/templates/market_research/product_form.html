@@ -1,0 +1,15 @@
+{% extends "market_research/base_mr.html" %}
+{% block title %}{% if idea %}Editar {{ idea.name }}{% else %}Nueva idea de producto{% endif %}{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>{% if idea %}Editar: {{ idea.name }}{% else %}Nueva idea de producto{% endif %}</h2>
+  <p class="muted">Al guardar se recalculan automáticamente el coste aterrizado,
+  los márgenes, el ROI y la puntuación de oportunidad.</p>
+  <form class="mr" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Guardar y calcular</button>
+    <a class="btn secondary" href="{% url 'market_research:dashboard' %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

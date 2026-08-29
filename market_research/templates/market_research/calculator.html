@@ -1,0 +1,54 @@
+{% extends "market_research/base_mr.html" %}
+{% block title %}Calculadora coste-beneficio{% endblock %}
+{% block content %}
+<div class="grid2">
+  <div class="card">
+    <h2>Calculadora coste-beneficio</h2>
+    <p class="muted">Simula un pedido de importación (FOB desde Alibaba) y una venta
+    online sin guardar nada. Introduce lo que sepas: los campos vacíos cuentan como 0.</p>
+    <form class="mr" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn" type="submit">Calcular</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Resultados</h2>
+    {% if results %}
+      <div class="kpis">
+        <div class="kpi"><div class="v">{{ results.landed_cost_per_unit|floatformat:2 }} €</div><div class="l">Coste aterrizado/ud</div></div>
+        <div class="kpi"><div class="v {% if results.profit_per_unit >= 0 %}pos{% else %}neg{% endif %}">{{ results.profit_per_unit|floatformat:2 }} €</div><div class="l">Beneficio/ud</div></div>
+        <div class="kpi"><div class="v {% if results.net_margin_pct >= 15 %}pos{% elif results.net_margin_pct < 0 %}neg{% endif %}">{{ results.net_margin_pct|floatformat:1 }}%</div><div class="l">Margen neto</div></div>
+        <div class="kpi"><div class="v">{{ results.roi_pct|floatformat:1 }}%</div><div class="l">ROI del pedido</div></div>
+      </div>
+      {% for w in results.warnings %}<div class="warnbox">⚠️ {{ w }}</div>{% endfor %}
+      <table class="mr">
+        <tr><th colspan="2">Importación</th></tr>
+        <tr><td>Mercancía (FOB)</td><td class="num">{{ results.goods_value|floatformat:2 }} €</td></tr>
+        <tr><td>Valor CIF</td><td class="num">{{ results.cif_value|floatformat:2 }} €</td></tr>
+        <tr><td>Arancel</td><td class="num">{{ results.duty_amount|floatformat:2 }} €</td></tr>
+        <tr><td>IVA de importación</td><td class="num">{{ results.import_vat_amount|floatformat:2 }} €</td></tr>
+        <tr><td><strong>Desembolso total</strong></td><td class="num"><strong>{{ results.total_cash_outlay|floatformat:2 }} €</strong></td></tr>
+        <tr><th colspan="2">Por unidad</th></tr>
+        <tr><td>Ingreso neto (sin IVA)</td><td class="num">{{ results.net_revenue_per_unit|floatformat:2 }} €</td></tr>
+        <tr><td>Coste variable total</td><td class="num">{{ results.variable_cost_per_unit|floatformat:2 }} €</td></tr>
+        <tr><td>Margen bruto</td><td class="num">{{ results.gross_margin_pct|floatformat:1 }}%</td></tr>
+        <tr><th colspan="2">Negocio</th></tr>
+        <tr><td>Beneficio del pedido completo</td><td class="num">{{ results.total_profit_order|floatformat:2 }} €</td></tr>
+        <tr><td>Punto de equilibrio (uds/mes)</td><td class="num">{{ results.breakeven_units }}</td></tr>
+        <tr><td>Payback</td><td class="num">{% if results.payback_months %}{{ results.payback_months|floatformat:1 }} meses{% else %}—{% endif %}</td></tr>
+      </table>
+    {% else %}
+      <p class="muted">Rellena el formulario y pulsa <strong>Calcular</strong>.</p>
+      <p class="muted">Reglas rápidas del sector:</p>
+      <ul class="muted">
+        <li><strong>Regla 3x:</strong> el PVP sin IVA debería ser ≥ 3 veces el coste FOB.</li>
+        <li><strong>Margen neto ≥ 15-20%</strong> tras comisiones y publicidad.</li>
+        <li>El coste aterrizado real suele ser un <strong>40-50% superior al FOB</strong>.</li>
+        <li><strong>Payback ≤ 6 meses</strong> en una primera importación.</li>
+      </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
