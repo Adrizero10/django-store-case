@@ -1,0 +1,110 @@
+/* Estilos del Analizador de productos Alibaba */
+:root {
+  --bg: #f5f6fa; --card: #ffffff; --ink: #1e2430; --muted: #6b7280;
+  --brand: #1f6feb; --ok: #15803d; --warn: #b45309; --bad: #b91c1c;
+  --border: #e5e7eb;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+header {
+  background: #101828; color: #fff; padding: 14px 24px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+header h1 { font-size: 18px; margin: 0; }
+header nav { display: flex; gap: 4px; flex-wrap: wrap; }
+header nav button {
+  background: transparent; border: 0; color: #cbd5e1; font: inherit;
+  padding: 6px 12px; border-radius: 8px; cursor: pointer;
+}
+header nav button:hover { color: #fff; }
+header nav button.activo { background: #1f2937; color: #fff; }
+
+main { max-width: 1150px; margin: 24px auto; padding: 0 16px; }
+.vista { display: none; }
+.vista.activa { display: block; }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px; margin-bottom: 20px;
+}
+h2 { margin-top: 0; }
+.muted { color: var(--muted); }
+.pos { color: var(--ok); font-weight: 600; }
+.neg { color: var(--bad); font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+th {
+  color: var(--muted); font-weight: 600; font-size: 13px;
+  text-transform: uppercase; letter-spacing: .03em;
+}
+.num { text-align: right !important; font-variant-numeric: tabular-nums; }
+.tabla-scroll { overflow-x: auto; }
+tr.fila-idea { cursor: pointer; }
+tr.fila-idea:hover td { background: #f8fafc; }
+
+.score {
+  display: inline-block; min-width: 52px; text-align: center;
+  padding: 3px 8px; border-radius: 999px; color: #fff; font-weight: 700;
+}
+.score-alto { background: var(--ok); }
+.score-medio { background: var(--warn); }
+.score-bajo { background: var(--bad); }
+
+.btn {
+  display: inline-block; background: var(--brand); color: #fff;
+  padding: 8px 16px; border: 0; border-radius: 8px; cursor: pointer;
+  text-decoration: none; font: inherit; font-size: 14px;
+}
+.btn.secundario { background: #475569; }
+.btn.peligro { background: var(--bad); }
+.acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.avisos div {
+  background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px;
+  padding: 10px 14px; margin: 10px 0;
+}
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+
+fieldset {
+  border: 1px solid var(--border); border-radius: 8px;
+  margin: 0 0 16px; padding: 12px 14px;
+}
+legend { font-weight: 600; font-size: 14px; padding: 0 6px; }
+.campo { display: flex; flex-direction: column; margin-bottom: 10px; }
+.campo label { font-size: 13px; color: var(--muted); margin-bottom: 3px; }
+.campo input, .campo select, .campo textarea {
+  padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; font: inherit;
+}
+.campo-check { flex-direction: row; align-items: center; gap: 8px; }
+.campo-check label { margin: 0; }
+.campos-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+@media (max-width: 640px) { .campos-2col { grid-template-columns: 1fr; } }
+
+.campo-rango { margin-bottom: 12px; }
+.campo-rango label { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; }
+.campo-rango output { font-weight: 700; color: var(--ink); }
+.campo-rango input[type=range] { width: 100%; }
+
+.kpis {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; margin-bottom: 12px;
+}
+.kpi { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.kpi .v { font-size: 21px; font-weight: 700; }
+.kpi .l { font-size: 12px; color: var(--muted); }
+
+.bar { background: #e5e7eb; border-radius: 999px; height: 8px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--brand); }
+
+#aviso-flotante {
+  position: fixed; bottom: 20px; right: 20px; background: #16a34a; color: #fff;
+  padding: 10px 18px; border-radius: 8px; opacity: 0; transition: opacity .3s;
+  pointer-events: none;
+}
+#aviso-flotante.visible { opacity: 1; }

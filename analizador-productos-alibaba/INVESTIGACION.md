@@ -1,8 +1,7 @@
 # Investigación: cómo se buscan productos ganadores para importar de Alibaba y venderlos online
 
 Este documento resume cómo lo hacen los vendedores profesionales (Amazon FBA, tiendas propias,
-dropshipping) y qué metodología implementa la herramienta incluida en este repo
-(app `market_research`, disponible en `/investigacion/`).
+dropshipping) y qué metodología implementa la herramienta de este repo (`index.html`).
 
 ---
 
@@ -130,16 +129,16 @@ sigue investigando · **40-54** dudoso · **<40** descartar.
 
 ## 6. Uso de la herramienta
 
-```bash
-python manage.py migrate market_research
-python manage.py seed_market_research   # 3 ejemplos opcionales
-python manage.py runserver
-```
+Abre `index.html` en el navegador (o sírvelo con `python3 -m http.server`).
 
-- `/investigacion/` — ranking de tus ideas por score, con margen, ROI y semáforos.
-- `/investigacion/calculadora/` — calculadora rápida de coste-beneficio sin guardar.
-- `/investigacion/producto/nuevo/` — ficha completa de investigación de un candidato.
-- También editable desde el admin de Django (`/admin/`).
+- **Ranking** — tus ideas ordenadas por score, con margen, ROI y semáforos.
+  Botones para cargar 3 ejemplos y para exportar/importar tus datos en JSON.
+- **Nueva idea** — ficha completa de investigación de un candidato, con el
+  análisis (score + finanzas) recalculado en vivo mientras escribes.
+- **Calculadora coste-beneficio** — simulación rápida sin guardar nada.
+
+Los datos viven en el localStorage de tu navegador: exporta el JSON de vez en
+cuando como copia de seguridad.
 
 ## 7. Fuentes
 

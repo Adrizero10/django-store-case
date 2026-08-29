@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'catalog.apps.CatalogConfig',
     'orders.apps.OrdersConfig',
-    'market_research.apps.MarketResearchConfig',
     'paypal.standard.ipn',
 
 ]
