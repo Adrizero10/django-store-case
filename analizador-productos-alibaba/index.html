@@ -11,6 +11,7 @@
     <h1>📦 Analizador de productos Alibaba</h1>
     <nav id="pestanas">
       <button data-vista="ranking" class="activo">Ranking</button>
+      <button data-vista="ia">IA · Analista de mercado</button>
       <button data-vista="editor">Nueva idea</button>
       <button data-vista="calculadora">Calculadora coste-beneficio</button>
       <button data-vista="metodologia">Metodología</button>
@@ -39,6 +40,32 @@
         </div>
         <div class="tabla-scroll"><table id="tabla-ranking"></table></div>
       </div>
+    </section>
+
+    <!-- ==================== IA · ANALISTA DE MERCADO ==================== -->
+    <section id="vista-ia" class="vista">
+      <div class="card">
+        <h2>🤖 Analista de mercado IA</h2>
+        <p class="muted">
+          Dado un nicho, categoría o producto, propone entre 5 y 10 ideas de producto con
+          demanda, competencia, tendencia, costes estimados, margen y viabilidad.
+          <strong>Simulación local por ahora</strong> (sin llamar a ninguna IA externa):
+          usa una base de plantillas por categoría con rangos realistas del sector, no datos
+          de mercado en tiempo real. Está lista para conectarse a una IA real (p. ej. la API
+          de Claude) más adelante manteniendo el mismo formato de salida.
+        </p>
+        <form id="form-ia">
+          <div class="campo">
+            <label for="ia-nicho">Nicho, categoría o producto a analizar</label>
+            <input type="text" id="ia-nicho" placeholder="p. ej. mascotas, fitness en casa, accesorios de coche…" required>
+          </div>
+          <div class="acciones">
+            <button class="btn" type="submit">Analizar con IA (simulado)</button>
+            <button class="btn secundario" type="button" id="btn-ia-exportar" hidden>Exportar análisis (JSON)</button>
+          </div>
+        </form>
+      </div>
+      <div id="panel-ia"></div>
     </section>
 
     <!-- ============================ EDITOR ============================= -->
@@ -137,6 +164,8 @@
   <div id="aviso-flotante"></div>
 
   <script src="js/motor.js"></script>
+  <script src="js/analista-ia.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/ia-ui.js"></script>
 </body>
 </html>
